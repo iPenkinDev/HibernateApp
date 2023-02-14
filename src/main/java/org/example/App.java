@@ -1,14 +1,14 @@
 package org.example;
 
-import org.example.model.Actor;
-import org.example.model.Movie;
+import org.example.model.Item;
+import org.example.model.Person;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Hello world!
@@ -16,8 +16,8 @@ import java.util.List;
 public class App {
     public static void main(String[] args) {
         Configuration configuration = new Configuration()
-                .addAnnotatedClass(Actor.class)
-                .addAnnotatedClass(Movie.class);
+                .addAnnotatedClass(Person.class)
+                .addAnnotatedClass(Item.class);
 
 
         SessionFactory sessionFactory = configuration.buildSessionFactory();
@@ -59,19 +59,31 @@ public class App {
 //            Passport passport = session.get(Passport.class, 1);
 //            System.out.println(passport.getPerson().getName());
 
-            Movie movie = new Movie("Pulp fiction", 1994);
-            Actor actor1 = new Actor("Harvey Keytel", 81);
-            Actor actor2 = new Actor("Samuel L. Jackson", 72);
+//            Movie movie = new Movie("Pulp fiction", 1994);
+//            Actor actor1 = new Actor("Harvey Keytel", 81);
+//            Actor actor2 = new Actor("Samuel L. Jackson", 72);
+//
+//            movie.setActors(new ArrayList<>(List.of(actor1, actor2)));
+//            actor1.setMovies(new ArrayList<>(Collections.singletonList(movie)));
+//            actor2.setMovies(new ArrayList<>(Collections.singletonList(movie)));
+//
+//            session.save(movie);
+//            session.save(actor1);
+//            session.save(actor2);
 
-            movie.setActors(new ArrayList<>(List.of(actor1, actor2)));
-            actor1.setMovies(new ArrayList<>(Collections.singletonList(movie)));
-            actor2.setMovies(new ArrayList<>(Collections.singletonList(movie)));
+//            Movie movie = session.get(Movie.class, 1);
+//            System.out.println(movie.getName());
 
-            session.save(movie);
-            session.save(actor1);
-            session.save(actor2);
+//            Actor actor = session.get(Actor.class, 2);
+//            System.out.println(actor.getMovies());
+
+//
+            Person person = session.get(Person.class, 2);
+            Hibernate.initialize(person.getItems()); //Method for loading entity
 
             session.getTransaction().commit();
+
+            System.out.println(person); //Out of session
         } finally {
             sessionFactory.close();
         }
